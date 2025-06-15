@@ -8,6 +8,9 @@
 <body>
   <h1>Phoneme-Feature Analysis</h1>
 
+  <p class="subtitle">Every sound ever produced by human vocal tract can be written as a vector of a finite number of values corresponding to the position of various articulators in the sound's production. Sounds tend to form classes based on values they have in common, and classes of sounds tend to behave alike when in contact with one another. As any spoken language has a finite inventory of sounds, the minimum set of values that suffices to uniquely describe any selected subset of segments can be easily computed. Likewise, given a set of values, a subset of segments with these values can be easily identified. This page serves as a tool to perform such analysis quicker and with more accuracy.
+  </p>
+
   <div id="step1">
     <h2>Hit the below segments to select segments of a language.</h2>
     
@@ -26,6 +29,8 @@
       <button onclick="goToStepFeatures()">Find Segments With Features</button>
     </div>
   </div>
+
+  <p class="subtitle">Given the pre-specified set of segments in the analysed language, this page returns all minimum sets of features and their values (RHS) necessary to identify an arbitrary strict subset of segments in the language (LHS). Note that this computation requires a correctly specified alphabet to yield the complete set of results.</p>
 
   <div id="step2" class="hidden">
     <h2>Select segments to analyse by clicking on them.</h2>
@@ -60,6 +65,8 @@
       <button onclick="closeApp()">Close App</button>
     </div>
   </div>
+
+  <p class="subtitle">Given the pre-specified inventory of segments in the analysed language (RHS), this page identifies all segments that share a set of customised values for any subset of features (LHS). </p>
 
   <div id="step-features" class="hidden">
     <h2>Click to activate feature and specify your values.</h2>

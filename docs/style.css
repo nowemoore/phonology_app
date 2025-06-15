@@ -8,6 +8,11 @@ h1, h2 {
   text-align: center;
 }
 
+.subtitle {
+  margin: 5px 0;
+  opacity: 60%;
+  text-align: center; /* assuming you want it centered like the title */
+}
 
 .phoneme-btn {
   font-family: 'Arial Unicode MS', Arial, sans-serif; 
@@ -512,6 +517,11 @@ h1, h2 {
     background-color: #9d327a; /* darker magenta buttons */
     color: #EEEFE0;
   }
+
+  .button-grid .phoneme-btn.matching {
+  background-color: #9d327a;
+  border-color: #9d327a;
+}
 
   .proceed-options button:hover,
   .action-buttons button:hover {
