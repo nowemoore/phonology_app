@@ -222,18 +222,137 @@ async function updateMatchingPhonemes() {
   }
 }
 
-// Client-side analysis function (simplified version)
+// Client-side analysis function - converted from Python backend
 function analyzeMinimumFeatures(alphabet, targets) {
-  // This is a simplified version - you'll need to implement the full logic
-  // from your Python backend here
+  console.log('Starting analysis for alphabet:', alphabet, 'targets:', targets);
   
-  // For now, return a placeholder
-  return {
-    solutions: [
-      [['example-feature', '+']]
-    ],
-    message: "Client-side analysis not fully implemented yet"
-  };
+  // Check if all phonemes exist in the dataset
+  const missingPhonemes = [...alphabet, ...targets].filter(p => 
+    !csvData.find(row => row.x === p)
+  );
+  
+  if (missingPhonemes.length > 0) {
+    throw new Error(`Phonemes not found in dataset: ${missingPhonemes.join(', ')}`);
+  }
+  
+  // Get non-target phonemes
+  const nonTargets = alphabet.filter(p => !targets.includes(p));
+  
+  // Find features that can potentially describe the target group
+  const validFeatures = [];
+  
+  for (const feature of allFeatures) {
+    // Get target values for this feature
+    const targetValues = targets.map(phoneme => {
+      const row = csvData.find(r => r.x === phoneme);
+      return parseInt(row[feature]);
+    });
+    
+    // Skip if any target phoneme has -1 for this feature
+    if (targetValues.includes(-1)) continue;
+    
+    // Check if all target phonemes have the same value for this feature
+    const uniqueValues = [...new Set(targetValues)];
+    if (uniqueValues.length === 1) {
+      const targetValue = uniqueValues[0];
+      
+      // Check if this feature value distinguishes targets from non-targets
+      if (nonTargets.length > 0) {
+        const nonTargetValues = nonTargets.map(phoneme => {
+          const row = csvData.find(r => r.x === phoneme);
+          return parseInt(row[feature]);
+        });
+        
+        // Feature is valid if not all non-targets have the same value as targets
+        if (!nonTargetValues.every(val => val === targetValue)) {
+          validFeatures.push(feature);
+        }
+      } else {
+        // If no non-targets, any consistent feature is valid
+        validFeatures.push(feature);
+      }
+    }
+  }
+  
+  console.log('Valid features found:', validFeatures);
+  
+  // Helper function to check if a combination of features is sufficient
+  function isSufficientCombination(featureCombo) {
+    // Get signatures for target phonemes
+    const targetSignatures = new Set();
+    
+    for (const phoneme of targets) {
+      const row = csvData.find(r => r.x === phoneme);
+      const signature = featureCombo.map(feature => parseInt(row[feature])).join(',');
+      targetSignatures.add(signature);
+    }
+    
+    // Check if any non-target phoneme has the same signature
+    for (const phoneme of nonTargets) {
+      const row = csvData.find(r => r.x === phoneme);
+      const signature = featureCombo.map(feature => parseInt(row[feature])).join(',');
+      if (targetSignatures.has(signature)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  // Helper function to generate combinations
+  function* combinations(array, size) {
+    if (size === 0) {
+      yield [];
+      return;
+    }
+    
+    for (let i = 0; i <= array.length - size; i++) {
+      for (const combo of combinations(array.slice(i + 1), size - 1)) {
+        yield [array[i], ...combo];
+      }
+    }
+  }
+  
+  // Try combinations of increasing size until we find sufficient ones
+  for (let size = 1; size <= validFeatures.length; size++) {
+    const solutions = [];
+    
+    for (const combo of combinations(validFeatures, size)) {
+      if (isSufficientCombination(combo)) {
+        // Create feature-value pairs for this solution
+        const solution = [];
+        for (const feature of combo) {
+          // Get the shared value for this feature among target phonemes
+          const targetRow = csvData.find(r => r.x === targets[0]);
+          const sharedValue = parseInt(targetRow[feature]);
+          const valueSymbol = sharedValue === 1 ? '+' : '-';
+          solution.push([feature, valueSymbol]);
+        }
+        solutions.push(solution);
+      }
+    }
+    
+    // If we found solutions at this size, return all of them (they're minimal)
+    if (solutions.length > 0) {
+      console.log('Found solutions:', solutions);
+      
+      if (solutions.length === 1) {
+        return {
+          solutions: solutions,
+          message: `Unique minimal solution found with ${size} feature(s)`
+        };
+      } else {
+        return {
+          solutions: solutions,
+          message: `Multiple minimal solutions found with ${size} feature(s) each`
+        };
+      }
+    }
+  }
+  
+  // If no combination works, return null (no solution)
+  console.log('No solution found');
+  return null;
 }
 
 async function updateLiveResults() {
