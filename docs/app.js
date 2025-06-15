@@ -158,6 +158,45 @@ window.onload = async () => {
   }
 };
 
+// Theme toggle functionality
+function initThemeToggle() {
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+  
+  // Check for saved theme preference
+  let currentTheme = localStorage.getItem('theme');
+  
+  if (!currentTheme) {
+    // If no saved preference, detect system preference but don't add classes
+    // The CSS media query will handle the styling automatically
+    currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Don't apply theme yet - let system preference handle it naturally
+  } else {
+    // If there's a saved preference, apply it immediately
+    applyTheme(currentTheme);
+  }
+  
+  // Toggle between light and dark
+  themeToggle.addEventListener('click', () => {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+  });
+  
+  function applyTheme(theme) {
+    // Remove both classes first
+    body.classList.remove('dark-mode', 'light-mode');
+    
+    if (theme === 'dark') {
+      body.classList.add('dark-mode');
+    } else {
+      body.classList.add('light-mode');
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initThemeToggle);
+
 function updateDisplays() {
   // Update alphabet displays
   const alphabetText = selectedAlphabet.length > 0 ? selectedAlphabet.join(', ') : '--';
