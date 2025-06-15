@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phoneme-Feature Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Phoneme-Feature Analysis</h1>
+
+  <div id="step1">
+    <h2>Hit segments to select an alphabet.</h2>
+    
+    <!-- Display selected alphabet -->
+    <div class="selection-display">
+      <strong>Selected Alphabet:</strong> 
+      <span id="alphabet-display">--</span>
+    </div>
+    
+    <!-- Organized phoneme selection -->
+    <div id="alphabet-buttons" class="phonemes-container"></div>
+    
+    <!-- Two options to proceed -->
+    <div class="proceed-options">
+      <button onclick="goToStep2()">Find Minimum Feature Specification</button>
+      <button onclick="goToStepFeatures()">Find Segments With Features</button>
+    </div>
+  </div>
+
+  <div id="step2" class="hidden">
+    <h2>Select segments to analyse by clicking on them.</h2>
+    
+    <!-- Display selected alphabet and targets -->
+    <div class="selection-display">
+      <strong>Alphabet:</strong> 
+      <span id="alphabet-display-step2"></span>
+    </div>
+    <div class="selection-display">
+      <strong>Selected Targets:</strong> 
+      <span id="target-display">--</span>
+    </div>
+    
+    <!-- Two-column layout -->
+    <div class="phonemes-layout">
+      <!-- Left side: Phoneme selection -->
+      <div class="phonemes-panel">
+        <h3>Select Target Phonemes:</h3>
+        <div id="target-buttons"></div>
+      </div>
+      
+      <!-- Right side: Real-time solutions -->
+      <div class="solutions-panel">
+        <h3>Minimum Feature Specifications:</h3>
+        <div id="live-results"></div>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button onclick="goToStep1()">Back to Alphabet</button>
+      <button onclick="closeApp()">Close App</button>
+    </div>
+  </div>
+
+  <div id="step-features" class="hidden">
+    <h2>Click to activate feature and specify your values.</h2>
+    
+    <!-- Display selected alphabet and features -->
+    <div class="selection-display">
+      <strong>Alphabet:</strong> 
+      <span id="alphabet-display-step-features"></span>
+    </div>
+    <div class="selection-display">
+      <strong>Selected Features:</strong> 
+      <span id="features-display">--</span>
+    </div>
+    
+    <!-- Two-column layout -->
+    <div class="features-layout">
+      <!-- Left side: Feature selection -->
+      <div class="features-panel">
+        <h3>Features:</h3>
+        <div id="features-buttons" class="features-grid"></div>
+      </div>
+      
+      <!-- Right side: Alphabet with highlighting -->
+      <div class="alphabet-panel">
+        <h3>Alphabet (matching phonemes highlighted):</h3>
+        <div id="alphabet-buttons-features" class="button-grid"></div>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button onclick="goToStep1()">Back to Alphabet</button>
+      <button onclick="closeApp()">Close App</button>
+    </div>
+  </div>
+
+  <div id="step3" class="hidden">
+    <h2>Results</h2>
+    
+    <!-- Display what was analyzed -->
+    <div class="selection-display">
+      <strong>Alphabet:</strong> 
+      <span id="alphabet-display-step3"></span>
+    </div>
+    <div class="selection-display">
+      <strong>Targets:</strong> 
+      <span id="target-display-step3"></span>
+    </div>
+    <div class="selection-display">
+      <strong>Features:</strong> 
+      <span id="features-display-step3"></span>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
