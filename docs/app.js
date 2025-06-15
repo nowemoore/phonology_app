@@ -26,43 +26,92 @@ const targetDisplayStep3 = document.getElementById('target-display-step3');
 const featuresDisplay = document.getElementById('features-display');
 const featuresDisplayStep3 = document.getElementById('features-display-step3');
 
-// Simple CSV parser function
+// Improved CSV parser function
 function parseCSV(csvText) {
+  console.log('Parsing CSV...');
+  console.log('Raw CSV (first 500 chars):', csvText.substring(0, 500));
+  
   const lines = csvText.trim().split('\n');
-  const headers = lines[0].split(',');
+  console.log('Number of lines:', lines.length);
+  console.log('First line (headers):', lines[0]);
+  
+  if (lines.length < 2) {
+    throw new Error('CSV file appears to be empty or has no data rows');
+  }
+  
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  console.log('Parsed headers:', headers);
+  
   const data = [];
   
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',');
+    if (lines[i].trim() === '') continue; // Skip empty lines
+    
+    const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
     const row = {};
+    
     for (let j = 0; j < headers.length; j++) {
-      row[headers[j]] = values[j];
+      row[headers[j]] = values[j] || '';
     }
     data.push(row);
   }
+  
+  console.log('Parsed data rows:', data.length);
+  console.log('First data row:', data[0]);
+  
   return { headers, data };
 }
 
 // Load phonemes and features from CSV
 window.onload = async () => {
   try {
+    console.log('Starting to load CSV...');
+    
+    // First check if the file exists
     const response = await fetch('ft.csv');
+    console.log('Fetch response status:', response.status);
+    console.log('Fetch response ok:', response.ok);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to load ft.csv: ${response.status} ${response.statusText}`);
+    }
+    
     const csvText = await response.text();
+    console.log('CSV text length:', csvText.length);
+    console.log('CSV starts with:', csvText.substring(0, 100));
+    
+    if (!csvText || csvText.length < 10) {
+      throw new Error('CSV file appears to be empty');
+    }
     
     // Parse CSV
     const parsed = parseCSV(csvText);
     csvData = parsed.data;
     
+    if (csvData.length === 0) {
+      throw new Error('No data found in CSV file');
+    }
+    
     // Get feature names (exclude 'x' and 'type' columns)
     allFeatures = parsed.headers.filter(h => h !== 'x' && h !== 'type');
+    console.log('All features found:', allFeatures);
+    
+    if (allFeatures.length === 0) {
+      throw new Error('No feature columns found in CSV');
+    }
     
     // Group phonemes by type
     const groupedPhonemes = {};
     const phonemesWithTypes = [];
     
-    csvData.forEach(row => {
-      const phoneme = row.x;
-      const type = row.type || 'other';
+    csvData.forEach((row, index) => {
+      const phoneme = row.x || row.X; // Try both 'x' and 'X'
+      const type = row.type || row.Type || 'other'; // Try both cases
+      
+      if (!phoneme) {
+        console.warn(`Row ${index + 1} has no phoneme value:`, row);
+        return;
+      }
       
       phonemesWithTypes.push({ phoneme, type });
       
@@ -72,13 +121,40 @@ window.onload = async () => {
       groupedPhonemes[type].push(phoneme);
     });
     
+    console.log('Grouped phonemes:', groupedPhonemes);
+    console.log('Total phonemes:', phonemesWithTypes.length);
+    
+    if (phonemesWithTypes.length === 0) {
+      throw new Error('No phonemes found in CSV data');
+    }
+    
     window.groupedPhonemes = groupedPhonemes;
     allPhonemes = phonemesWithTypes.map(item => item.phoneme);
     
     renderGroupedPhonemeButtons(alphabetDiv, groupedPhonemes, selectedAlphabet);
     updateDisplays();
+    
+    console.log('App initialization complete!');
+    
   } catch (error) {
     console.error('Error loading data:', error);
+    
+    // Show error message to user
+    if (alphabetDiv) {
+      alphabetDiv.innerHTML = `
+        <div style="color: red; padding: 20px; border: 1px solid red; border-radius: 5px;">
+          <h3>Error Loading Data</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <p><strong>Troubleshooting:</strong></p>
+          <ul>
+            <li>Make sure 'ft.csv' is in the same folder as index.html</li>
+            <li>Check browser console (F12) for more details</li>
+            <li>Verify the CSV file is not empty</li>
+            <li>Make sure the CSV has headers in the first row</li>
+          </ul>
+        </div>
+      `;
+    }
   }
 };
 
@@ -111,7 +187,7 @@ function getSelectedFeaturesText() {
 // Client-side function to find phonemes matching features
 function findPhonemesByFeatures(alphabet, featureSpecs) {
   return alphabet.filter(phoneme => {
-    const row = csvData.find(r => r.x === phoneme);
+    const row = csvData.find(r => r.x === phoneme || r.X === phoneme);
     if (!row) return false;
     
     return featureSpecs.every(([feature, value]) => {
