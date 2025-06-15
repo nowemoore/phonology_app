@@ -4,6 +4,7 @@ let selectedAlphabet = [];
 let selectedTargets = [];
 let selectedFeatures = {}; // {featureName: '+' or '-' or null}
 let matchingPhonemes = []; // Phonemes that match selected features
+let csvData = []; // Store parsed CSV data
 
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
@@ -25,26 +26,54 @@ const targetDisplayStep3 = document.getElementById('target-display-step3');
 const featuresDisplay = document.getElementById('features-display');
 const featuresDisplayStep3 = document.getElementById('features-display-step3');
 
-// Load phonemes and features from backend
+// Simple CSV parser function
+function parseCSV(csvText) {
+  const lines = csvText.trim().split('\n');
+  const headers = lines[0].split(',');
+  const data = [];
+  
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(',');
+    const row = {};
+    for (let j = 0; j < headers.length; j++) {
+      row[headers[j]] = values[j];
+    }
+    data.push(row);
+  }
+  return { headers, data };
+}
+
+// Load phonemes and features from CSV
 window.onload = async () => {
   try {
-    const phonemesWithTypesRes = await fetch('http://127.0.0.1:5000/phonemes-with-types');
-    const phonemesWithTypes = await phonemesWithTypesRes.json();
+    const response = await fetch('ft.csv');
+    const csvText = await response.text();
     
+    // Parse CSV
+    const parsed = parseCSV(csvText);
+    csvData = parsed.data;
+    
+    // Get feature names (exclude 'x' and 'type' columns)
+    allFeatures = parsed.headers.filter(h => h !== 'x' && h !== 'type');
+    
+    // Group phonemes by type
     const groupedPhonemes = {};
-    phonemesWithTypes.forEach(item => {
-      const type = item.type || 'other';
+    const phonemesWithTypes = [];
+    
+    csvData.forEach(row => {
+      const phoneme = row.x;
+      const type = row.type || 'other';
+      
+      phonemesWithTypes.push({ phoneme, type });
+      
       if (!groupedPhonemes[type]) {
         groupedPhonemes[type] = [];
       }
-      groupedPhonemes[type].push(item.phoneme);
+      groupedPhonemes[type].push(phoneme);
     });
     
     window.groupedPhonemes = groupedPhonemes;
     allPhonemes = phonemesWithTypes.map(item => item.phoneme);
-    
-    const featuresRes = await fetch('http://127.0.0.1:5000/features');
-    allFeatures = await featuresRes.json();
     
     renderGroupedPhonemeButtons(alphabetDiv, groupedPhonemes, selectedAlphabet);
     updateDisplays();
@@ -79,6 +108,21 @@ function getSelectedFeaturesText() {
   return selected.length > 0 ? selected.join(', ') : '--';
 }
 
+// Client-side function to find phonemes matching features
+function findPhonemesByFeatures(alphabet, featureSpecs) {
+  return alphabet.filter(phoneme => {
+    const row = csvData.find(r => r.x === phoneme);
+    if (!row) return false;
+    
+    return featureSpecs.every(([feature, value]) => {
+      const featureValue = row[feature];
+      if (value === '+') return featureValue === '1';
+      if (value === '-') return featureValue === '0';
+      return false;
+    });
+  });
+}
+
 async function updateMatchingPhonemes() {
   if (selectedAlphabet.length === 0) {
     matchingPhonemes = [];
@@ -95,21 +139,25 @@ async function updateMatchingPhonemes() {
   }
   
   try {
-    const response = await fetch('http://127.0.0.1:5000/find-by-features', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        alphabet: selectedAlphabet,
-        features: featureSpecs
-      })
-    });
-    
-    const data = await response.json();
-    matchingPhonemes = data.matching_phonemes || [];
+    matchingPhonemes = findPhonemesByFeatures(selectedAlphabet, featureSpecs);
   } catch (error) {
     console.error('Error finding matching phonemes:', error);
     matchingPhonemes = [];
   }
+}
+
+// Client-side analysis function (simplified version)
+function analyzeMinimumFeatures(alphabet, targets) {
+  // This is a simplified version - you'll need to implement the full logic
+  // from your Python backend here
+  
+  // For now, return a placeholder
+  return {
+    solutions: [
+      [['example-feature', '+']]
+    ],
+    message: "Client-side analysis not fully implemented yet"
+  };
 }
 
 async function updateLiveResults() {
@@ -126,16 +174,7 @@ async function updateLiveResults() {
   }
   
   try {
-    const response = await fetch('http://127.0.0.1:5000/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        alphabet: selectedAlphabet,
-        targets: selectedTargets
-      })
-    });
-    
-    const data = await response.json();
+    const data = analyzeMinimumFeatures(selectedAlphabet, selectedTargets);
     liveResultsDiv.innerHTML = formatLiveResults(data);
   } catch (error) {
     liveResultsDiv.innerHTML = '<div class="no-solution-message">Error computing solutions</div>';
@@ -344,20 +383,7 @@ function renderFeatureButtons(container) {
         plusBtn.classList.remove('selected');
         minusBtn.classList.remove('selected');
         updateMatchingPhonemes().then(() => {
-          const alphabetFeaturesDiv = document.getElementById('alphabet-buttons-features');
-          const alphabetContainer = document.createElement('div');
-          alphabetContainer.className = 'phoneme-type-grid';
-          alphabetFeaturesDiv.innerHTML = '';
-          alphabetFeaturesDiv.appendChild(alphabetContainer);
-          
-          selectedAlphabet.forEach(phoneme => {
-            const btn = document.createElement('button');
-            btn.textContent = phoneme;
-            btn.className = 'phoneme-btn';
-            if (matchingPhonemes.includes(phoneme)) btn.classList.add('matching');
-            alphabetContainer.appendChild(btn);
-          });
-          
+          updateAlphabetFeaturesDisplay();
           updateDisplays();
         });
       }
@@ -369,20 +395,7 @@ function renderFeatureButtons(container) {
       plusBtn.classList.add('selected');
       minusBtn.classList.remove('selected');
       updateMatchingPhonemes().then(() => {
-        const alphabetFeaturesDiv = document.getElementById('alphabet-buttons-features');
-        const alphabetContainer = document.createElement('div');
-        alphabetContainer.className = 'phoneme-type-grid';
-        alphabetFeaturesDiv.innerHTML = '';
-        alphabetFeaturesDiv.appendChild(alphabetContainer);
-        
-        selectedAlphabet.forEach(phoneme => {
-          const btn = document.createElement('button');
-          btn.textContent = phoneme;
-          btn.className = 'phoneme-btn';
-          if (matchingPhonemes.includes(phoneme)) btn.classList.add('matching');
-          alphabetContainer.appendChild(btn);
-        });
-        
+        updateAlphabetFeaturesDisplay();
         updateDisplays();
       });
     };
@@ -393,20 +406,7 @@ function renderFeatureButtons(container) {
       minusBtn.classList.add('selected');
       plusBtn.classList.remove('selected');
       updateMatchingPhonemes().then(() => {
-        const alphabetFeaturesDiv = document.getElementById('alphabet-buttons-features');
-        const alphabetContainer = document.createElement('div');
-        alphabetContainer.className = 'phoneme-type-grid';
-        alphabetFeaturesDiv.innerHTML = '';
-        alphabetFeaturesDiv.appendChild(alphabetContainer);
-        
-        selectedAlphabet.forEach(phoneme => {
-          const btn = document.createElement('button');
-          btn.textContent = phoneme;
-          btn.className = 'phoneme-btn';
-          if (matchingPhonemes.includes(phoneme)) btn.classList.add('matching');
-          alphabetContainer.appendChild(btn);
-        });
-        
+        updateAlphabetFeaturesDisplay();
         updateDisplays();
       });
     };
@@ -416,6 +416,22 @@ function renderFeatureButtons(container) {
     featureDiv.appendChild(featureBtn);
     featureDiv.appendChild(toggleDiv);
     container.appendChild(featureDiv);
+  });
+}
+
+function updateAlphabetFeaturesDisplay() {
+  const alphabetFeaturesDiv = document.getElementById('alphabet-buttons-features');
+  const alphabetContainer = document.createElement('div');
+  alphabetContainer.className = 'phoneme-type-grid';
+  alphabetFeaturesDiv.innerHTML = '';
+  alphabetFeaturesDiv.appendChild(alphabetContainer);
+  
+  selectedAlphabet.forEach(phoneme => {
+    const btn = document.createElement('button');
+    btn.textContent = phoneme;
+    btn.className = 'phoneme-btn';
+    if (matchingPhonemes.includes(phoneme)) btn.classList.add('matching');
+    alphabetContainer.appendChild(btn);
   });
 }
 
@@ -482,25 +498,7 @@ function goToStepFeatures() {
   matchingPhonemes = [];
   renderFeatureButtons(featuresDiv);
   
-  // Render alphabet buttons in horizontal layout for features step
-  const alphabetFeaturesDiv = document.getElementById('alphabet-buttons-features');
-  const alphabetContainer = document.createElement('div');
-  alphabetContainer.className = 'phoneme-type-grid';
-  alphabetFeaturesDiv.innerHTML = '';
-  alphabetFeaturesDiv.appendChild(alphabetContainer);
-  
-  selectedAlphabet.forEach(phoneme => {
-    const btn = document.createElement('button');
-    btn.textContent = phoneme;
-    btn.className = 'phoneme-btn';
-    
-    // Check if this phoneme matches current features
-    if (matchingPhonemes.includes(phoneme)) btn.classList.add('matching');
-    
-    // No selection functionality for alphabet display in features step
-    alphabetContainer.appendChild(btn);
-  });
-  
+  updateAlphabetFeaturesDisplay();
   updateDisplays();
 }
 
@@ -530,34 +528,26 @@ function closeApp() {
 
 function analyze() {
   if (selectedTargets.length === 0) return alert('Select target phonemes.');
-  fetch('http://127.0.0.1:5000/analyze', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      alphabet: selectedAlphabet,
-      targets: selectedTargets
-    })
-  })
-    .then(res => res.json())
-    .then(data => {
-      step1.classList.add('hidden');
-      step2.classList.add('hidden');
-      step3.classList.remove('hidden');
-      resultDiv.innerHTML = formatResults(data);
-      updateDisplays();
-    })
-    .catch(error => {
-      step1.classList.add('hidden');
-      step2.classList.add('hidden');
-      step3.classList.remove('hidden');
-      resultDiv.innerHTML = `
-        <div class="result-section error">
-          <h3>Error</h3>
-          <p>An error occurred while analyzing: ${error.message}</p>
-        </div>
-      `;
-      updateDisplays();
-    });
+  
+  try {
+    const data = analyzeMinimumFeatures(selectedAlphabet, selectedTargets);
+    step1.classList.add('hidden');
+    step2.classList.add('hidden');
+    step3.classList.remove('hidden');
+    resultDiv.innerHTML = formatResults(data);
+    updateDisplays();
+  } catch (error) {
+    step1.classList.add('hidden');
+    step2.classList.add('hidden');
+    step3.classList.remove('hidden');
+    resultDiv.innerHTML = `
+      <div class="result-section error">
+        <h3>Error</h3>
+        <p>An error occurred while analyzing: ${error.message}</p>
+      </div>
+    `;
+    updateDisplays();
+  }
 }
 
 function reset() {
