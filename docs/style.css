@@ -35,21 +35,21 @@ h1, h2 {
 }
 
 .phoneme-btn.selected {
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
 }
 
 .phoneme-btn.matching {
-  background-color: #28a745;
-  color: white;
-  border-color: #28a745;
-  box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+  background-color: #A7C1A8;
+  color: #EEEFE0;
+  border-color: #A7C1A8;
+  box-shadow: 0 0 8px rgba(167, 193, 168, 0.3);
 }
 
 .phoneme-btn.selected.matching {
-  background-color: #17a2b8;
-  border-color: #17a2b8;
-  box-shadow: 0 0 8px rgba(23, 162, 184, 0.3);
+  background-color: #628B9C;
+  border-color: #628B9C;
+  box-shadow: 0 0 8px rgba(98, 139, 156, 0.3);
 }
 
 .hidden {
@@ -73,7 +73,7 @@ h1, h2 {
 
 .selection-display span {
   font-family: 'Arial Unicode MS', Arial, sans-serif;
-  color: #007bff;
+  color: #3D4A3D;
 }
 
 /* Phoneme type organization */
@@ -94,7 +94,7 @@ h1, h2 {
   font-size: 20px;
   margin: 0 auto 8px auto;
   padding: 5px 0;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #3D4A3D;
   color: #333;
   display: block;
   min-width: 180px;
@@ -138,13 +138,13 @@ h1, h2 {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 30vw;
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
   margin: 0;
 }
 
 .proceed-options button:hover {
-  background-color: #0056b3;
+  background-color: #A0AFA0;
   transform: scale(1.02);
 }
 
@@ -188,7 +188,7 @@ h1, h2 {
 
 .live-result-item h4 {
   margin: 0 0 8px 0;
-  color: #007bff;
+  color: #3D4A3D;
   font-size: 14px;
 }
 
@@ -199,8 +199,8 @@ h1, h2 {
 }
 
 .live-feature-item {
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
   padding: 4px 8px;
   border-radius: 4px;
   font-family: 'Courier New', monospace;
@@ -240,19 +240,19 @@ h1, h2 {
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  background-color: white;
+  background-color: #EEEFE0;
   font-size: 14px;
   text-align: left;
   transition: all 0.2s ease;
 }
 
 .feature-btn:hover {
-  background-color: #f0f0f0;
+  background-color: #A0AFA0;
 }
 
 .feature-btn.active {
-  background-color: #e7f3ff;
-  border-color: #007bff;
+  background-color: #A7C1A8;
+  border-color: #3D4A3D;
   font-weight: bold;
 }
 
@@ -267,7 +267,7 @@ h1, h2 {
   height: 30px;
   border-radius: 4px;
   cursor: pointer;
-  background-color: white;
+  background-color: #EEEFE0;
   font-weight: bold;
   font-size: 16px;
   transition: all 0.2s ease;
@@ -282,16 +282,16 @@ h1, h2 {
 }
 
 .toggle-btn.selected {
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
 }
 
 .toggle-btn:not(:disabled):hover {
-  background-color: #f0f0f0;
+  background-color: #A0AFA0;
 }
 
 .toggle-btn.selected:hover {
-  background-color: #0056b3;
+  background-color: #A7C1A8;
 }
 
 /* Result formatting */
@@ -341,7 +341,7 @@ h1, h2 {
   scroll-behavior: smooth;
   
   scrollbar-width: thin;
-  scrollbar-color: #007bff #f1f1f1;
+  scrollbar-color: #3D4A3D #f1f1f1;
 }
 
 .solutions-carousel::-webkit-scrollbar {
@@ -354,20 +354,20 @@ h1, h2 {
 }
 
 .solutions-carousel::-webkit-scrollbar-thumb {
-  background: #007bff;
+  background: #3D4A3D;
   border-radius: 4px;
 }
 
 .solutions-carousel::-webkit-scrollbar-thumb:hover {
-  background: #0056b3;
+  background: #A7C1A8;
 }
 
 /* Individual solution cards */
 .solution-card {
   flex: 0 0 200px;
   min-height: 150px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 2px solid #007bff;
+  background-color: rgba(238, 239, 224, 0.8);
+  border: 2px solid #3D4A3D;
   border-radius: 8px;
   padding: 15px;
   display: flex;
@@ -377,13 +377,13 @@ h1, h2 {
 .solution-header {
   text-align: center;
   margin-bottom: 15px;
-  border-bottom: 1px solid #007bff;
+  border-bottom: 1px solid #3D4A3D;
   padding-bottom: 8px;
 }
 
 .solution-header h4 {
   margin: 0;
-  color: #007bff;
+  color: #3D4A3D;
   font-weight: bold;
 }
 
@@ -395,8 +395,8 @@ h1, h2 {
 }
 
 .feature-item {
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
   padding: 8px 12px;
   border-radius: 6px;
   font-family: 'Courier New', monospace;
@@ -406,18 +406,18 @@ h1, h2 {
 }
 
 .button-grid .phoneme-btn.selected {
-  background-color: #a21caf;
-  color: white;
+  background-color: #A7C1A8;
+  color: #EEEFE0;
 }
 
 .button-grid .phoneme-btn.matching {
-  background-color: #be185d;
-  border-color: #be185d;
+  background-color: #97C1D3;
+  border-color: #97C1D3;
 }
 
 .button-grid .phoneme-btn.selected.matching {
-  background-color: #7c2d92;
-  border-color: #7c2d92;
+  background-color: #628B9C;
+  border-color: #628B9C;
 }
 
 /* Action buttons styling */
@@ -440,13 +440,13 @@ h1, h2 {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 30vw;
-  background-color: #007bff;
-  color: white;
+  background-color: #3D4A3D;
+  color: #EEEFE0;
   margin: 0;
 }
 
 .action-buttons button:hover {
-  background-color: #0056b3;
+  background-color: #A0AFA0;
   transform: scale(1.02);
 }
 
@@ -478,7 +478,7 @@ h1, h2 {
 
   .phoneme-btn.selected {
     background-color: #9d327a; /* darker magenta */
-    color: white;
+    color: #EEEFE0;
   }
 
   .phoneme-btn.matching {
@@ -490,7 +490,6 @@ h1, h2 {
     background-color: #9d327a; /* darker purple-magenta */
     border-color: #9d327a;
   }
-}
 
   .selection-display {
     background-color: #2a2a2a;
@@ -510,7 +509,7 @@ h1, h2 {
   .proceed-options button,
   .action-buttons button {
     background-color: #9d327a; /* darker magenta buttons */
-    color: white;
+    color: #EEEFE0;
   }
 
   .proceed-options button:hover,
@@ -521,7 +520,6 @@ h1, h2 {
   .features-grid {
     background-color: #2a2a2a;
   }
-
 
   .feature-btn {
     background-color: #2a2a2a;
@@ -619,6 +617,6 @@ h1, h2 {
   .phonemes-panel h3,
   .alphabet-panel h3,
   .solutions-panel h3 {
-  color: #f5f5dc;
-
+    color: #f5f5dc;
+  }
 }
