@@ -365,6 +365,7 @@ body.dark-mode .toggle-icon.sun {
   background-color: #3D4A3D;
   color: #EEEFE0;
   margin: 0;
+  margin-bottom: 5vh;
 }
 
 .proceed-options button:hover {
