@@ -788,6 +788,7 @@ body.light-mode .toggle-btn.selected:hover {
 body.light-mode .live-result-item {
   background-color: #BFC8CC;
   border: 1px solid #dee2e6;
+  margin-right: 4vw;
 }
 
 body.light-mode .live-result-item h4 {
@@ -1185,4 +1186,6 @@ body.dark-mode .phonemes-panel h3,
 body.dark-mode .alphabet-panel h3,
 body.dark-mode .solutions-panel h3 {
   color: #f5f5dc;
+
 }
+
