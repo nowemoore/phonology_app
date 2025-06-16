@@ -7,6 +7,11 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+a:link {
+         color: #9d327a; 
+         text-decoration: none; /* Remove underline */
+       }
+
 body {
   font-family: 'EB Garamond', serif;
   padding: 20px;
