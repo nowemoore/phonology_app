@@ -17,6 +17,12 @@ h1, h2 {
   text-align: center;
 }
 
+h5 {
+  text-align: center;
+  font-weight: normal;
+  font-size: 1em;
+}
+
 body.feature-help p {
   width: 60%;
   margin-left: auto;

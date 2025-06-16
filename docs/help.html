@@ -7,7 +7,7 @@
 <body class="feature-help">
   <h1>Okay but what's going on?</h1>
   
-  <h2>Glad you asked. Buckle up, abscraction awaits!</h2>
+  <h5>Glad you asked. Buckle up, abscraction awaits!</h5>
   <h2>What do we mean by "sound features"?</h2>
   <p>Human vocal tract consists of several muscles working together to produce sound. Thanks to varying 
     combinations of muscles involved in the production of any particular sound, sound segments have different features.
@@ -62,8 +62,34 @@ specify the sound.</p>
     environments. Now notice that vectors B and C, but not A, share a value for the third feature. This means that it
     is likely the third feature that conditions the observed behaviour&mdash;simply because when this value changes,
     the observed behaviour changes too! We say that the third feature is the "minimum feature specification" of segments
-    B and C in a sound inventory consisting of A, B, and C. You can also work this problem the other way around: suppose
-    
+    B and C in a sound inventory consisting of A, B, and C. You can also work the problem the other way around: suppose
+    you know that the third feature conditions a certain behaviour. Given the inventory, you can easily predict
+    that segments B and C will likely show this behaviour but A will not.
+</p>
+
+<h2>What does this mean in practice?</h2>
+<p>This problem gets more interesting when it is not a single feature but rather a 
+    combination of features that specifies a class. For instance, it is not all voiceless sound
+segments that get aspirated at the beginning of syllables in English. Voiceless *stops*
+like /p/ or /t/ get aspirated, but voiceless continuants like /f/ or /s/ do not (it would
+actually be quite difficult to aspirate them). So, looking for the right linear combination
+to specify a class of sound segments that get affected by various rules in various languages
+is a part of the fun. Now as humans learn their first-ever language, their
+brains learn to identify groups of sounds by their features and their vocal tract muscles learn thr groups'
+behaviours in various environments (recall examples with aspirating voiceless stops at the beginning od syllables).
+As they learn other languages later on, they can no longer unlearn these behaviours and will reproduce them on
+lexical items where they no longer apply. This is what we call "speaking with an accent". (Some people are very good 
+at learning the behaviours of sound segment classes in other languages, which allows them to "speak without an
+accent" in langauges they learn&mdash;or become stand-up comedians.)</p>
+
+<h2>How is this interesting?</h2>
+<p>Notice that that this problem is only
+solvable thanks to its finite nature: a finite universe of features, finite inventories of sound segments,
+finite sets of target segments. In the above problem, we can only say that the third feature uniquely 
+identifies segments B and C *in the inventory* of A, B, and C. This also means that the human brain is performing
+quite a large computation every time we speak a word. It also makes one think about all the computations
+that cannot be unlearnt and the subsequent limitations of overriding. And, on a higher level, how defined subspaces
+help in the making sense of infinity.
 </p>
 </body>
 </html>
