@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phoneme-Feature Analysis - Help</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Okay but what's going on?</h1>
+  
+  <h2>Glad you asked. Buckle up, loads of abstraction coming your way!</h2>
+  <p>Human vocal tract consists of several muscles working together to produce sound. Thanks to varying combinations of muscles involved in the production of any particular sound, sound segments have different features. 
+    For example, humans sometimes employ their vocal cords to produce sounds like /g/ or /d/ but "turn them off" to produce sounds like /k/ or /t/. Ans so, /g/ and /d/ share the value for a feature named "voice", where the value for /g/ and /d/&mdash;but not /k/ and /t/&mdash; is 1 (or +).</p>
+<p>It turns out every sound can have up to 25 unique featues! One could think that this means that every sound can
+    be represented as a vector of 25 binary values, but it's not quite that simple. First, not all features always specify a sound. 
+    Sometimes a feature just doesn't matter for a production of a particular sound, and the position in the vector would therefore be neither 0 nor one but rather something as a 
+    "null". For instance, when producing the sound /n/, all air comes out through the nose, and so any feature that has to 
+    do with the position of the tongue or lips, such as [rnd] for lip rounding, will remain unspecified. 
+    Second, some features are mutually exclusive. For instance, different kinds of vowels can be specified around 
+    the position of the tongue&mdash;i.e. [high] or [low]. However, when the tongue is positioned high, it cannot at the 
+    same time be positioned low. (An attentive reader may ask why not just have one feature. The answer to that question
+    is that sometimes the tongue must be positioned somewhere in the middle, which can only be specified if both of
+    these features are unique&mdash;though clearly not independent.)</p>
+    
+    <div style="text-align: center;">
+        <img src="imag.png" alt="Vocal tract diagram" width="200">
+  <img src="image.png" alt="Vocal tract diagram" width="200">
+   <img src="img.png" alt="Vocal tract diagram" width="200">
+</div>
+
+<p>At the end of the day, every sound can be expressed 
+    as a vector of 25 binary (and null) values&mdash;or as two binary vectors: one "activation" vector (which specifies whether or not a particular feature is involved) and one "values" vector (which specifies the actual values for involved features).
+Now if you have every segments in the form of a vector, you can represent whole language inventories in a linear space. 
+This is helpful because it defines a more abstract problem of minimum feature specification. In other words, which values suffice
+to uniquely describe select subsets of sound segments given a langauge segment inventory.</p>
+
+  <p>Now of course the question is why bother trying to specify the </p>
+  
+</body>
+</html>
