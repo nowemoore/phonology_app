@@ -4,36 +4,66 @@
   <title>Phoneme-Feature Analysis - Help</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="feature-help">
   <h1>Okay but what's going on?</h1>
   
-  <h2>Glad you asked. Buckle up, loads of abstraction coming your way!</h2>
-  <p>Human vocal tract consists of several muscles working together to produce sound. Thanks to varying combinations of muscles involved in the production of any particular sound, sound segments have different features. 
-    For example, humans sometimes employ their vocal cords to produce sounds like /g/ or /d/ but "turn them off" to produce sounds like /k/ or /t/. Ans so, /g/ and /d/ share the value for a feature named "voice", where the value for /g/ and /d/&mdash;but not /k/ and /t/&mdash; is 1 (or +).</p>
-<p>It turns out every sound can have up to 25 unique featues! One could think that this means that every sound can
-    be represented as a vector of 25 binary values, but it's not quite that simple. First, not all features always specify a sound. 
-    Sometimes a feature just doesn't matter for a production of a particular sound, and the position in the vector would therefore be neither 0 nor one but rather something as a 
-    "null". For instance, when producing the sound /n/, all air comes out through the nose, and so any feature that has to 
-    do with the position of the tongue or lips, such as [rnd] for lip rounding, will remain unspecified. 
-    Second, some features are mutually exclusive. For instance, different kinds of vowels can be specified around 
-    the position of the tongue&mdash;i.e. [high] or [low]. However, when the tongue is positioned high, it cannot at the 
-    same time be positioned low. (An attentive reader may ask why not just have one feature. The answer to that question
-    is that sometimes the tongue must be positioned somewhere in the middle, which can only be specified if both of
-    these features are unique&mdash;though clearly not independent.)</p>
-    
-    <div style="text-align: center;">
+  <h2>Glad you asked. Buckle up, abscraction awaits!</h2>
+  <h2>What do we mean by "sound features"?</h2>
+  <p>Human vocal tract consists of several muscles working together to produce sound. Thanks to varying 
+    combinations of muscles involved in the production of any particular sound, sound segments have different features.
+    Now many of the features are simply binary.
+    For example, humans sometimes employ their vocal cords to produce sounds like /g/ or /d/ but "turn them off" 
+    to produce sounds like /k/ or /t/. Ans so, /g/ and /d/ share the value for a feature named "voice",
+     where the value for /g/ and /d/ is 1 (or +)&mdash;while for /k/ and /t/ it is 0 (or -).</p>
+
+     <div style="text-align: center;">
         <img src="imag.png" alt="Vocal tract diagram" width="200">
   <img src="image.png" alt="Vocal tract diagram" width="200">
    <img src="img.png" alt="Vocal tract diagram" width="200">
 </div>
 
-<p>At the end of the day, every sound can be expressed 
-    as a vector of 25 binary (and null) values&mdash;or as two binary vectors: one "activation" vector (which specifies whether or not a particular feature is involved) and one "values" vector (which specifies the actual values for involved features).
-Now if you have every segments in the form of a vector, you can represent whole language inventories in a linear space. 
-This is helpful because it defines a more abstract problem of minimum feature specification. In other words, which values suffice
-to uniquely describe select subsets of sound segments given a langauge segment inventory.</p>
+     <h2>How many "features" does a sound segment have?</h2>
+     <p>This is actually a complex question. First of, some features are non-binary. For instance, one cannot  
+        "turn on" or "turn off" their place of articulation. There simply are more than two places in the tract 
+        where specific sound segments are produced. For instance, sounds like /p/ or /m/ are articulated at lips, 
+        /t/ or /l/ at the front of the mouth, and /k/ and /&#x14b/ at the back of the tongue. This is where we can 
+        capitalise on the finiteness: because there is a constant number of places of articulation, we can simply 
+        make them a feature each and only mark one as operative. By this definition, every sound can have up to 25 binary features!</p>
 
-  <p>Now of course the question is why bother trying to specify the </p>
-  
+    <h2>How many different sounds can humans produce?</h2>
+    <p>It is not 25<sup>2</sup>, sorry to disappoint!  First, not all features always specify a sound. 
+    Sometimes a feature just doesn't matter for a production of a particular sound, and the position in the vector would 
+    therefore be neither 0 nor one but rather something as a "null". (An attentive reader may notice that this means the vector is not exactly binary.
+  A simple workaround is to have two equal length specification vectors instead: one to
+  specify which features are active and one to specify the now properly binary value of
+  active features.) For instance, when producing the 
+    sound /n/, all air comes out through the nose, and so any feature that has to 
+    do with the position of the tongue or lips, such as [rnd] for lip rounding, will remain unspecified. 
+Another hurdle is that not all features are completely independent. For instance, different kinds of vowels can be specified around 
+    the position of the tongue&mdash;i.e. [high] or [low]. However, when the tongue is positioned high, it cannot at the 
+    same time be positioned low. At the same time, not positioning the tongue high does not necessarily imply
+positioning it low&mdash;it can be positioned in the middle&mdash;and so both features are still necessary to
+specify the sound.</p>
+    
+    
+
+<h2>Why bother?</h2>
+<p>So, the question remaing why try so hard to specify sound segments as vectors of binary value. This is because 
+    sounds that share values for specific features form classes. For instance /p/, /k/, and /t/ are all "voiceless" and 
+    /b/, /g/, and /d/ are "voiced". Different classes of sounds tend to behave alike in different phonological
+    environments. For instance /p/, /k/, and /t/&mdash;but not /b/, /g/, and /d/&mdash; get aspirated (pronounced
+    with a little bit of an extra air) at the beginning of syllables (cf. /pump/ versus /bump/). Binary vectors
+    allow us to extract features sound segments have in common and identify classes more neatly.
+</p>
+
+<h2>Where is the maths?</h2>
+<p>Let me demonstrate the problem on a simple set of vectors of only 3 values. Consider 3 binary vectors 
+    representing sound segments A, B, and C such that A=[1,0,0], B=[0,1,1], and C=[1,0,1]. Say that you see segments B and C behaving alike in a certain sounds
+    environments. Now notice that vectors B and C, but not A, share a value for the third feature. This means that it
+    is likely the third feature that conditions the observed behaviour&mdash;simply because when this value changes,
+    the observed behaviour changes too! We say that the third feature is the "minimum feature specification" of segments
+    B and C in a sound inventory consisting of A, B, and C. You can also work this problem the other way around: suppose
+    
+</p>
 </body>
 </html>

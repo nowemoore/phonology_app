@@ -17,6 +17,26 @@ h1, h2 {
   text-align: center;
 }
 
+body.feature-help p {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;
+}
+
+body.feature-help h2 {
+  position: relative;
+}
+
+body.feature-help h2::after {
+  content: "";
+  display: block;
+  width: 100px;          /* your desired line width */
+  height: 2px;           /* line thickness */
+  background-color: #3D4A3D;
+  margin: 10px auto 0;   /* space above the line + center it */
+}
+
 /* Help button styling */
 .help-button-container {
   position: fixed !important;
