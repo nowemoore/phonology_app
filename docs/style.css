@@ -39,7 +39,7 @@ h5 {
 }
 
 .footer-left {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .footer-right {
@@ -58,6 +58,7 @@ body.feature-help p {
   margin-left: auto;
   margin-right: auto;
   text-align: justify;
+  margin-bottom: 3rem;
 }
 
 body.feature-help h2 {
