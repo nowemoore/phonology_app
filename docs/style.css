@@ -678,7 +678,7 @@ body.light-mode .action-buttons button {
 
 body.light-mode .proceed-options button:hover,
 body.light-mode .action-buttons button:hover {
-  background-color: #BFC8CC;
+  background-color: #A7C1A8;
 }
 
 body.light-mode .features-grid {
@@ -723,7 +723,6 @@ body.light-mode .toggle-btn.selected:hover {
 body.light-mode .live-result-item {
   background-color: #BFC8CC;
   border: 1px solid #dee2e6;
-  margin: 0px 10px 10px 0px;
 }
 
 body.light-mode .live-result-item h4 {
@@ -885,7 +884,6 @@ body.light-mode .solutions-panel h3 {
   body:not(.dark-mode):not(.light-mode) .live-result-item {
     background-color: #2a2a2a;
     border: 1px solid #444;
-        margin: 0px 10px 10px 0px;
   }
 
   body:not(.dark-mode):not(.light-mode) .live-result-item h4 {
@@ -1062,7 +1060,6 @@ body.dark-mode .toggle-btn.selected:hover {
 body.dark-mode .live-result-item {
   background-color: #2a2a2a;
   border: 1px solid #444;
-      margin: 0px 10px 10px 0px;
 }
 
 body.dark-mode .live-result-item h4 {
