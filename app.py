@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 PHONEME_CSV = 'backend/ft.csv'
-
+## omg this is so weird
 # Serve the main HTML file
 @app.route('/')
 def index():
